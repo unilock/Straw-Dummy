@@ -1,5 +1,6 @@
 package me.steven.strawdummy.entity
 
+import me.steven.strawdummy.identifier
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.LivingEntityRenderer
 import net.minecraft.client.render.entity.feature.*
@@ -20,7 +21,11 @@ class StrawDummyEntityRenderer(dispatcher: EntityRenderDispatcher, model: Player
         addFeature(StuckStingersFeatureRenderer(this))
     }
 
-    override fun getTexture(entity: StrawDummyEntity?): Identifier {
-        return Identifier("textures/entity/steve.png")
+    override fun getTexture(entity: StrawDummyEntity): Identifier {
+        return TEXTURE_IDENTIFIERS[entity.entityId % 9]
+    }
+
+    companion object {
+        val TEXTURE_IDENTIFIERS = (1..9).map { identifier("textures/entity/dummy$it.png") }
     }
 }
