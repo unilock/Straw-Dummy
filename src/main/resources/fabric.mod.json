@@ -4,16 +4,16 @@
   "version": "${version}",
 
   "name": "Straw Dummy",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Added dummy players for you to test damage!",
   "authors": [
-    "Me!"
+    "GabrielOlvH"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/GabrielOlvH/Straw-Dummy",
+    "sources": "https://github.com/GabrielOlvH/Straw-Dummy"
   },
 
-  "license": "CC0-1.0",
+  "license": "Apache-2.0",
   "icon": "assets/strawdummy/icon.png",
 
   "environment": "*",
