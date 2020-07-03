@@ -12,7 +12,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 class StrawDummyEntityRenderer(dispatcher: EntityRenderDispatcher, model: PlayerEntityModel<StrawDummyEntity>)
-    : LivingEntityRenderer<StrawDummyEntity, PlayerEntityModel<StrawDummyEntity>>(dispatcher, model,  0.5f) {
+    : LivingEntityRenderer<StrawDummyEntity, PlayerEntityModel<StrawDummyEntity>>(dispatcher, model, 0.5f) {
 
     init {
         addFeature(ArmorFeatureRenderer(this, BipedEntityModel(0.5f), BipedEntityModel(1.0f)))

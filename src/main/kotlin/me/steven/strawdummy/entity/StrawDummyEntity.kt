@@ -3,7 +3,6 @@ package me.steven.strawdummy.entity
 import me.steven.strawdummy.StrawDummy
 import net.minecraft.command.arguments.EntityAnchorArgumentType
 import net.minecraft.entity.*
-import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
@@ -14,7 +13,6 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Arm
 import net.minecraft.util.Hand
 import net.minecraft.util.collection.DefaultedList
-import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {

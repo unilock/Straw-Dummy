@@ -3,7 +3,6 @@ package me.steven.strawdummy.entity
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.data.DataTracker
-import net.minecraft.entity.data.TrackedData
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.Packet
@@ -19,6 +18,7 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
         set(value) {
             this.dataTracker.set(DAMAGE_AMOUNT, value)
         }
+
     override fun writeCustomDataToTag(tag: CompoundTag?) {
     }
 
