@@ -47,7 +47,8 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
 
         velocity = vec3d.multiply(0.01)
         val vec3d2 = velocity
-        this.setVelocity(vec3d2.x, vec3d2.y - 0.03, vec3d2.z)
+        val age = ticks / 2000f
+        this.setVelocity(vec3d2.x + (0.01 - age), vec3d2.y - 0.03, vec3d2.z + (0.01 - age))
         updatePosition(d, e, f)
     }
 
