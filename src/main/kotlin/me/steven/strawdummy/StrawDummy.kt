@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.Item
+import net.minecraft.item.ItemGroup
 import net.minecraft.util.registry.Registry
 
 class StrawDummy : ModInitializer {
@@ -32,6 +33,6 @@ class StrawDummy : ModInitializer {
             .disableSummon()
             .build()
 
-        val DUMMY_ITEM = StrawDummyItem(Item.Settings())
+        val DUMMY_ITEM = StrawDummyItem(Item.Settings().group(ItemGroup.MISC))
     }
 }

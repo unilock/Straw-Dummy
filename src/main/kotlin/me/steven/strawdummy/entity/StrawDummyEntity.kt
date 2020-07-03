@@ -3,10 +3,7 @@ package me.steven.strawdummy.entity
 import me.steven.strawdummy.StrawDummy
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.SpawnReason
+import net.minecraft.entity.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
@@ -41,6 +38,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     override fun isSpectator(): Boolean = false
 
     override fun isPushable(): Boolean = false
+
+    override fun pushAway(entity: Entity?) {}
 
     override fun takeKnockback(f: Float, d: Double, e: Double) {}
 
