@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.steven.strawdummy.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+  ],
+  "client": [
+    "MixinClientPlayNetworkHandler"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,11 +1,14 @@
 package me.steven.strawdummy.entity
 
 import me.steven.strawdummy.identifier
+import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.LivingEntityRenderer
 import net.minecraft.client.render.entity.feature.*
 import net.minecraft.client.render.entity.model.BipedEntityModel
 import net.minecraft.client.render.entity.model.PlayerEntityModel
+import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 class StrawDummyEntityRenderer(dispatcher: EntityRenderDispatcher, model: PlayerEntityModel<StrawDummyEntity>)
@@ -20,6 +23,8 @@ class StrawDummyEntityRenderer(dispatcher: EntityRenderDispatcher, model: Player
         addFeature(TridentRiptideFeatureRenderer(this))
         addFeature(StuckStingersFeatureRenderer(this))
     }
+
+    override fun renderLabelIfPresent(entity: StrawDummyEntity?, text: Text?, matrices: MatrixStack?, vertexConsumers: VertexConsumerProvider?, light: Int) {}
 
     override fun getTexture(entity: StrawDummyEntity): Identifier {
         return TEXTURE_IDENTIFIERS[entity.entityId % 9]

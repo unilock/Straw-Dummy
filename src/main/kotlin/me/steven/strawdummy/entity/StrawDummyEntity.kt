@@ -1,9 +1,12 @@
 package me.steven.strawdummy.entity
 
 import me.steven.strawdummy.StrawDummy
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.SpawnReason
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
@@ -18,7 +21,7 @@ import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {
 
-    private var lastDamageAmount = 0F
+    private var lastDamageAmount = 0.0f
     private var inventory = DefaultedList.ofSize(6, ItemStack.EMPTY)
 
     override fun getMainArm(): Arm = Arm.RIGHT
@@ -43,7 +46,11 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun setHealth(health: Float) {
         lastDamageAmount = getHealth() - health
-        customName = LiteralText(lastDamageAmount.toString())
+        if (lastDamageAmount > 0) {
+            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world, null, null, null, blockPos.offset(horizontalFacing).up(), SpawnReason.TRIGGERED, false, false)
+            entity?.damage = lastDamageAmount
+            world.spawnEntity(entity)
+        }
     }
 
     override fun interact(player: PlayerEntity?, hand: Hand?): ActionResult {

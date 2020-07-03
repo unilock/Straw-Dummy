@@ -1,5 +1,6 @@
 package me.steven.strawdummy
 
+import me.steven.strawdummy.entity.DamageNumberEntity
 import me.steven.strawdummy.entity.StrawDummyEntity
 import me.steven.strawdummy.item.StrawDummyItem
 import net.fabricmc.api.ModInitializer
@@ -15,6 +16,7 @@ class StrawDummy : ModInitializer {
     override fun onInitialize() {
         Registry.register(Registry.ENTITY_TYPE, identifier("strawdummy"), DUMMY_ENTITY_TYPE)
         Registry.register(Registry.ITEM, identifier("strawdummy"), DUMMY_ITEM)
+        Registry.register(Registry.ENTITY_TYPE, identifier("damage_number_entity"), DAMAGE_NUMBER_ENTITY_TYPE)
         FabricDefaultAttributeRegistry.register(DUMMY_ENTITY_TYPE, LivingEntity.createLivingAttributes())
     }
 
@@ -23,6 +25,11 @@ class StrawDummy : ModInitializer {
 
         val DUMMY_ENTITY_TYPE = FabricEntityTypeBuilder.create<StrawDummyEntity>(SpawnGroup.MISC) { type, world -> StrawDummyEntity(type, world) }
             .dimensions(EntityDimensions(0.6f, 1.8f, false))
+            .build()
+        val DAMAGE_NUMBER_ENTITY_TYPE = FabricEntityTypeBuilder.create<DamageNumberEntity>(SpawnGroup.MISC) { type, world -> DamageNumberEntity(type, world) }
+            .dimensions(EntityDimensions(0.6f, 0.6f, false))
+            .disableSaving()
+            .disableSummon()
             .build()
 
         val DUMMY_ITEM = StrawDummyItem(Item.Settings())
