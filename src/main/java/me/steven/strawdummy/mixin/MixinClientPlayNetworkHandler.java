@@ -2,11 +2,9 @@ package me.steven.strawdummy.mixin;
 
 import me.steven.strawdummy.StrawDummy;
 import me.steven.strawdummy.entity.DamageNumberEntity;
-import me.steven.strawdummy.entity.StrawDummyEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
-import net.minecraft.network.packet.s2c.play.EntityAnimationS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,8 +18,8 @@ public class MixinClientPlayNetworkHandler {
     public void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo cbi) {
         ClientPlayNetworkHandler cpnh = (ClientPlayNetworkHandler) (Object) this;
 
-        if (packet.getEntityTypeId() == StrawDummy.Companion.getDAMAGE_NUMBER_ENTITY_TYPE()) {
-            DamageNumberEntity e = new DamageNumberEntity(StrawDummy.Companion.getDAMAGE_NUMBER_ENTITY_TYPE(), cpnh.getWorld());
+        if (packet.getEntityTypeId() == StrawDummy.INSTANCE.getDAMAGE_NUMBER_ENTITY_TYPE()) {
+            DamageNumberEntity e = new DamageNumberEntity(StrawDummy.INSTANCE.getDAMAGE_NUMBER_ENTITY_TYPE(), cpnh.getWorld());
 
             int i = packet.getId();
             e.setPos(packet.getX(), packet.getY(), packet.getZ());

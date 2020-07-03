@@ -20,11 +20,9 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
             this.dataTracker.set(DAMAGE_AMOUNT, value)
         }
     override fun writeCustomDataToTag(tag: CompoundTag?) {
-        //tag?.putFloat("Damage", damage)
     }
 
     override fun readCustomDataFromTag(tag: CompoundTag?) {
-        //damage = tag?.getFloat("Damage") ?: damage
     }
 
     override fun createSpawnPacket(): Packet<*> = EntitySpawnS2CPacket(this)

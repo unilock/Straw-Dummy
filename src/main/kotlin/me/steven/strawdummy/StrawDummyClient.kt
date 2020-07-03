@@ -10,13 +10,11 @@ import net.minecraft.client.render.entity.model.BipedEntityModel
 import net.minecraft.client.render.entity.model.PlayerEntityModel
 import net.minecraft.entity.EntityType
 
-class StrawDummyClient : ClientModInitializer {
+object StrawDummyClient : ClientModInitializer {
     override fun onInitializeClient() {
         EntityRendererRegistry.INSTANCE.register(StrawDummy.DUMMY_ENTITY_TYPE) { dispatcher, _ -> StrawDummyEntityRenderer(dispatcher, STRAW_DUMMY_MODEL) }
         EntityRendererRegistry.INSTANCE.register(StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE) { dispatcher, _ -> DamageNumberRenderer(dispatcher) }
     }
 
-    companion object {
-        val STRAW_DUMMY_MODEL = StrawDummyEntityModel()
-    }
+    val STRAW_DUMMY_MODEL = StrawDummyEntityModel()
 }

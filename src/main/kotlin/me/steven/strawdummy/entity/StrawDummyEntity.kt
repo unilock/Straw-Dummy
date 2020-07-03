@@ -53,10 +53,9 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
         val damage = getHealth() - health
         if (damage > 0 && lastSource is PlayerEntity) {
             val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world, null, null, null,
-                blockPos.offset(horizontalFacing.rotateYClockwise()).up(2), SpawnReason.TRIGGERED, false, false) ?: return
-            val offset = Vec3d(horizontalFacing.vector.x.toDouble(), horizontalFacing.vector.y.toDouble(), horizontalFacing.vector.z.toDouble()).multiply(0.5)
-            val pos = entity.pos.add(offset)
-            entity.setPos(pos.x, pos.y, pos.z)
+                blockPos, SpawnReason.TRIGGERED, false, false) ?: return
+            val side = horizontalFacing.rotateYClockwise()
+            entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
             entity.damage = damage
             entity.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, lastSource!!.pos)
             world.spawnEntity(entity)
