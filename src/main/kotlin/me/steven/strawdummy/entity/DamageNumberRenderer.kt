@@ -15,7 +15,7 @@ class DamageNumberRenderer(dispatcher: EntityRenderDispatcher) : EntityRenderer<
 
     override fun render(entity: DamageNumberEntity, yaw: Float, tickDelta: Float, matrices: MatrixStack?, vertexConsumers: VertexConsumerProvider?, light: Int) {
         matrices?.push()
-        matrices?.translate(1.0, 1.0, 1.0)
+        matrices?.multiply(this.dispatcher.rotation)
         val age = entity.ticks / 1000f
         matrices?.scale(-0.05f + age, -0.05f + age, 0.05f - age)
         if (0.05f - age <= 0) entity.remove()

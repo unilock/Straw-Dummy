@@ -1,24 +1,25 @@
 package me.steven.strawdummy.entity
 
 import me.steven.strawdummy.StrawDummy
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
+import net.minecraft.command.arguments.EntityAnchorArgumentType
 import net.minecraft.entity.*
+import net.minecraft.entity.attribute.EntityAttributes
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
-import net.minecraft.text.LiteralText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Arm
 import net.minecraft.util.Hand
 import net.minecraft.util.collection.DefaultedList
+import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {
 
-    private var lastDamageAmount = 0.0f
+    private var lastSource: Entity? = null
     private var inventory = DefaultedList.ofSize(6, ItemStack.EMPTY)
 
     override fun getMainArm(): Arm = Arm.RIGHT
@@ -43,13 +44,24 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun takeKnockback(f: Float, d: Double, e: Double) {}
 
+    override fun damage(damageSource: DamageSource, amount: Float): Boolean {
+        this.lastSource = damageSource.source
+        return super.damage(damageSource, amount)
+    }
+
     override fun setHealth(health: Float) {
-        lastDamageAmount = getHealth() - health
-        if (lastDamageAmount > 0) {
-            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world, null, null, null, blockPos.offset(horizontalFacing).up(), SpawnReason.TRIGGERED, false, false)
-            entity?.damage = lastDamageAmount
+        val damage = getHealth() - health
+        if (damage > 0 && lastSource is PlayerEntity) {
+            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world, null, null, null,
+                blockPos.offset(horizontalFacing.rotateYClockwise()).up(2), SpawnReason.TRIGGERED, false, false) ?: return
+            val offset = Vec3d(horizontalFacing.vector.x.toDouble(), horizontalFacing.vector.y.toDouble(), horizontalFacing.vector.z.toDouble()).multiply(0.5)
+            val pos = entity.pos.add(offset)
+            entity.setPos(pos.x, pos.y, pos.z)
+            entity.damage = damage
+            entity.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, lastSource!!.pos)
             world.spawnEntity(entity)
         }
+
     }
 
     override fun interact(player: PlayerEntity?, hand: Hand?): ActionResult {
