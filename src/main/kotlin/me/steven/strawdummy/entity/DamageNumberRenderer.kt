@@ -19,11 +19,10 @@ class DamageNumberRenderer(dispatcher: EntityRenderDispatcher) : EntityRenderer<
         val age = entity.ticks / 1000f
         matrices?.scale(-0.05f + age, -0.05f + age, 0.05f - age)
         if (0.05f - age <= 0) entity.remove()
-        val m = matrices?.peek()?.model
         val textRenderer = MinecraftClient.getInstance().textRenderer
         val text = LiteralText(DamageNumberEntity.FORMAT.format(entity.damage))
         val h = -textRenderer.getWidth(text) / 2f
-        textRenderer.draw(text, h, 0f, 0xd1040e, false, m, vertexConsumers, false, 1, 1)
+        textRenderer.draw(matrices, text, h, 0f, (0xeeee2222).toInt())
         matrices?.pop()
     }
 }
