@@ -1,7 +1,7 @@
 package me.steven.strawdummy.entity
 
 import me.steven.strawdummy.StrawDummy
-import net.minecraft.command.arguments.EntityAnchorArgumentType
+import net.minecraft.command.argument.EntityAnchorArgumentType
 import net.minecraft.entity.*
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
@@ -9,6 +9,7 @@ import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Arm
 import net.minecraft.util.Hand
@@ -49,8 +50,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
-        if (damage > 0 && lastSource is PlayerEntity) {
-            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world, null, null, null,
+        if (damage > 0 && lastSource is PlayerEntity && !world.isClient) {
+            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world as ServerWorld, null, null, null,
                 blockPos, SpawnReason.TRIGGERED, false, false) ?: return
             val side = horizontalFacing.rotateYClockwise()
             entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
