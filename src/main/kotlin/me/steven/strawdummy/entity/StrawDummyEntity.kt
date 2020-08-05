@@ -18,7 +18,6 @@ import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {
 
-    private var lastSource: Entity? = null
     private var inventory = DefaultedList.ofSize(6, ItemStack.EMPTY)
 
     override fun getMainArm(): Arm = Arm.RIGHT
@@ -43,20 +42,15 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun takeKnockback(f: Float, d: Double, e: Double) {}
 
-    override fun damage(damageSource: DamageSource, amount: Float): Boolean {
-        this.lastSource = damageSource.source
-        return super.damage(damageSource, amount)
-    }
-
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
-        if (damage > 0 && lastSource is PlayerEntity && !world.isClient) {
+        if (damage > 0 && !world.isClient) {
             val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world as ServerWorld, null, null, null,
                 blockPos, SpawnReason.TRIGGERED, false, false) ?: return
             val side = horizontalFacing.rotateYClockwise()
             entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
             entity.damage = damage
-            entity.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, lastSource!!.pos)
+
             world.spawnEntity(entity)
         }
 
