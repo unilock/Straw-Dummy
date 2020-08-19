@@ -44,7 +44,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
-        if (damage > 0 && !world.isClient) {
+        if (damage > 0 && !world.isClient && !isDead) {
             val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world as ServerWorld, null, null, null,
                 blockPos, SpawnReason.TRIGGERED, false, false) ?: return
             val side = horizontalFacing.rotateYClockwise()
@@ -53,7 +53,11 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
             world.spawnEntity(entity)
         }
+    }
 
+    override fun applyDamage(source: DamageSource?, amount: Float) {
+        if (source == DamageSource.OUT_OF_WORLD) super.setHealth(0f)
+        super.applyDamage(source, amount)
     }
 
     override fun interact(player: PlayerEntity?, hand: Hand?): ActionResult {
