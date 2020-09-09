@@ -42,6 +42,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun isPushable(): Boolean = false
 
+    override fun canBreatheInWater(): Boolean = true
+
     override fun pushAway(entity: Entity?) {}
 
     override fun takeKnockback(f: Float, d: Double, e: Double) {}
@@ -49,8 +51,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
         if (damage > 0 && !world.isClient && !isDead) {
-            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world as ServerWorld, null, null, null,
-                blockPos, SpawnReason.TRIGGERED, false, false) ?: return
+            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world as ServerWorld, null, null, null, blockPos, SpawnReason.TRIGGERED, false, false) ?: return
             val side = horizontalFacing.rotateYClockwise()
             entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
             entity.damage = damage
@@ -60,7 +61,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     }
 
     override fun applyDamage(source: DamageSource?, amount: Float) {
-        if (source == DamageSource.OUT_OF_WORLD) super.setHealth(0f)
+        if (source == DamageSource.OUT_OF_WORLD || source == DamageSource.IN_WALL) super.setHealth(0f)
         super.applyDamage(source, amount)
     }
 
