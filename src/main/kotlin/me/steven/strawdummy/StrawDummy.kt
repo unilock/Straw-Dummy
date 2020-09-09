@@ -1,18 +1,22 @@
 package me.steven.strawdummy
 
 import com.google.gson.GsonBuilder
+import io.netty.buffer.Unpooled
 import me.steven.strawdummy.entity.DamageNumberEntity
 import me.steven.strawdummy.entity.StrawDummyEntity
 import me.steven.strawdummy.item.StrawDummyItem
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.registry.Registry
 import java.io.File
 
@@ -32,6 +36,14 @@ object StrawDummy : ModInitializer {
         Registry.register(Registry.ENTITY_TYPE, identifier("damage_number_entity"), DAMAGE_NUMBER_ENTITY_TYPE)
         FabricDefaultAttributeRegistry.register(DUMMY_ENTITY_TYPE, LivingEntity.createLivingAttributes())
     }
+
+    fun sendConfigPacket(playerEntity: ServerPlayerEntity) {
+        val buf = PacketByteBuf(Unpooled.buffer())
+        buf.writeInt(CONFIG.dummyLimitPerUser)
+        ServerSidePacketRegistry.INSTANCE.sendToPlayer(playerEntity, CONFIG_SYNC_PACKET, buf)
+    }
+
+    val CONFIG_SYNC_PACKET = identifier("config_sync")
 
     val CONFIG = Config()
 
