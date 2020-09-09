@@ -14,11 +14,13 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Arm
 import net.minecraft.util.Hand
 import net.minecraft.util.collection.DefaultedList
+import net.minecraft.world.TeleportTarget
 import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {
 
     private var inventory = DefaultedList.ofSize(6, ItemStack.EMPTY)
+    var ownerUuid: String? = null
 
     override fun getMainArm(): Arm = Arm.RIGHT
 
@@ -33,6 +35,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     override fun getArmorItems(): MutableIterable<ItemStack> {
         return EquipmentSlot.values().filter { it.type == EquipmentSlot.Type.ARMOR }.map { inventory[it.armorStandSlotId] }.toMutableList()
     }
+
+    override fun getTeleportTarget(destination: ServerWorld?): TeleportTarget? = null
 
     override fun isSpectator(): Boolean = false
 
@@ -95,6 +99,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
             inv.add(data)
         }
         tag?.put("Inventory", inv)
+        if (ownerUuid != null)
+            tag?.putString("OwnerUuid", ownerUuid)
         return super.toTag(tag)
     }
 
@@ -104,6 +110,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
             data as CompoundTag
             inventory[data.getInt("Slot")] = ItemStack.fromTag(data)
         }
+        ownerUuid = tag?.getString("OwnerUuid")
         super.fromTag(tag)
     }
 }
