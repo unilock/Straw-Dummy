@@ -14,6 +14,8 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
+import net.minecraft.util.math.Box
+import net.minecraft.util.math.Direction
 import net.minecraft.world.World
 
 class StrawDummyItem(settings: Settings) : Item(settings) {
@@ -29,7 +31,16 @@ class StrawDummyItem(settings: Settings) : Item(settings) {
         }
         val stack = context.stack
         stack?.decrement(1)
-        val entity = StrawDummy.DUMMY_ENTITY_TYPE.create(world, null, null, context.player, context.blockPos, SpawnReason.MOB_SUMMONED, true, false)
+        val pos = when (context.side) {
+            Direction.UP -> context.blockPos
+            Direction.DOWN -> context.blockPos.up()
+            else -> context.blockPos.offset(context.side).down()
+        }
+        val entity = StrawDummy.DUMMY_ENTITY_TYPE.create(world, null, null, context.player, pos, SpawnReason.MOB_SUMMONED, true, false)
+        if (world.getBlockCollisions(entity, Box(pos.up()).stretch(0.0, 1.0, 0.0)).anyMatch { !it.isEmpty }) {
+            player?.sendMessage(TranslatableText("item.strawdummy.strawdummy.too_tight").formatted(Formatting.RED, Formatting.BOLD), true)
+            return ActionResult.PASS
+        }
         entity?.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, context.player?.pos)
         entity?.ownerUuid = player?.uuidAsString
         world.spawnEntity(entity)
