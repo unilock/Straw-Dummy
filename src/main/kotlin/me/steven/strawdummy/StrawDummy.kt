@@ -44,6 +44,7 @@ object StrawDummy : ModInitializer {
     }
 
     val CONFIG_SYNC_PACKET = identifier("config_sync")
+    val DAMAGE_NUMBER_PACKET = identifier("damage_number_packet")
 
     val CONFIG = Config()
 

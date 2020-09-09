@@ -5,9 +5,6 @@
   "mixins": [
     "MixinPlayerManager"
   ],
-  "client": [
-    "MixinClientPlayNetworkHandler"
-  ],
   "injectors": {
     "defaultRequire": 1
   }

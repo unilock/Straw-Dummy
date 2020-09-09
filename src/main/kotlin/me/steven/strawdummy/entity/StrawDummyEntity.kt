@@ -1,19 +1,25 @@
 package me.steven.strawdummy.entity
 
+import io.netty.buffer.Unpooled
 import me.steven.strawdummy.StrawDummy
-import net.minecraft.command.argument.EntityAnchorArgumentType
-import net.minecraft.entity.*
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Arm
 import net.minecraft.util.Hand
 import net.minecraft.util.collection.DefaultedList
+import net.minecraft.util.math.MathHelper
 import net.minecraft.world.TeleportTarget
 import net.minecraft.world.World
 
@@ -51,12 +57,22 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
         if (damage > 0 && !world.isClient && !isDead) {
-            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world as ServerWorld, null, null, null, blockPos, SpawnReason.TRIGGERED, false, false) ?: return
+            val entity = StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE.create(world) ?: return
             val side = horizontalFacing.rotateYClockwise()
             entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
             entity.damage = damage
-
-            world.spawnEntity(entity)
+            val buf = PacketByteBuf(Unpooled.buffer())
+            buf.writeInt(entity.entityId)
+            buf.writeUuid(entity.uuid)
+            buf.writeDouble(entity.x)
+            buf.writeDouble(entity.y)
+            buf.writeDouble(entity.z)
+            buf.writeByte(MathHelper.floor(pitch * 256.0f / 360.0f))
+            buf.writeByte(MathHelper.floor(yaw * 256.0f / 360.0f))
+            buf.writeFloat(entity.damage)
+            world.players.forEach {
+                ServerSidePacketRegistry.INSTANCE.sendToPlayer(it, StrawDummy.DAMAGE_NUMBER_PACKET, buf)
+            }
         }
     }
 
