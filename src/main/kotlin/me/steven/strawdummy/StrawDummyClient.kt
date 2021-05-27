@@ -8,16 +8,17 @@ import me.steven.strawdummy.entity.StrawDummyEntityRenderer
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
+import net.minecraft.client.render.entity.model.EntityModelLayers
 import net.minecraft.client.world.ClientWorld
 
 object StrawDummyClient : ClientModInitializer {
     override fun onInitializeClient() {
-        EntityRendererRegistry.INSTANCE.register(StrawDummy.DUMMY_ENTITY_TYPE) { dispatcher, _ -> StrawDummyEntityRenderer(
-            dispatcher,
-            STRAW_DUMMY_MODEL
+        EntityRendererRegistry.INSTANCE.register(StrawDummy.DUMMY_ENTITY_TYPE) { ctx -> StrawDummyEntityRenderer(
+            ctx,
+            StrawDummyEntityModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR))
         ) }
-        EntityRendererRegistry.INSTANCE.register(StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE) { dispatcher, _ -> DamageNumberRenderer(
-            dispatcher
+        EntityRendererRegistry.INSTANCE.register(StrawDummy.DAMAGE_NUMBER_ENTITY_TYPE) { ctx -> DamageNumberRenderer(
+            ctx
         ) }
         ClientSidePacketRegistry.INSTANCE.register(StrawDummy.CONFIG_SYNC_PACKET) { _, buf ->
             StrawDummy.CONFIG.dummyLimitPerUser = buf.readInt()
@@ -37,10 +38,8 @@ object StrawDummyClient : ClientModInitializer {
             e.updateTrackedPosition(x, y, z)
             e.pitch = (pitch * 360f)  / 256.0f
             e.yaw = (yaw * 360f) / 256.0f
-            e.entityId = id
+            e.setEntityId(id)
             ctx.taskQueue.execute { (ctx.player.world as ClientWorld).addEntity(id, e) }
         }
     }
-
-    val STRAW_DUMMY_MODEL = StrawDummyEntityModel()
 }

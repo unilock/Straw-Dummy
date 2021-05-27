@@ -2,6 +2,7 @@ package me.steven.strawdummy.entity
 
 import io.netty.buffer.Unpooled
 import me.steven.strawdummy.StrawDummy
+import me.steven.strawdummy.mixin.AccessorEntity
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
@@ -11,8 +12,8 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtCompound
+import net.minecraft.nbt.NbtList
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
@@ -24,6 +25,8 @@ import net.minecraft.world.TeleportTarget
 import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {
+
+    val eId: Int get() = (this as AccessorEntity).entityId
 
     private var inventory = DefaultedList.ofSize(6, ItemStack.EMPTY)
     var ownerUuid: String? = null
@@ -52,7 +55,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
 
     override fun pushAway(entity: Entity?) {}
 
-    override fun takeKnockback(f: Float, d: Double, e: Double) {}
+    override fun takeKnockback(strength: Double, x: Double, z: Double) {
+    }
 
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
@@ -62,7 +66,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
             entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
             entity.damage = damage
             val buf = PacketByteBuf(Unpooled.buffer())
-            buf.writeInt(entity.entityId)
+            buf.writeInt(entity.eId)
             buf.writeUuid(entity.uuid)
             buf.writeDouble(entity.x)
             buf.writeDouble(entity.y)
@@ -91,7 +95,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
                     inventory[it] = ItemStack.EMPTY
                 }
             }
-            if (player.inventory?.insertStack(ItemStack(StrawDummy.DUMMY_ITEM)) == true) remove()
+            if (player.inventory?.insertStack(ItemStack(StrawDummy.DUMMY_ITEM)) == true) remove(RemovalReason.DISCARDED)
             return ActionResult.SUCCESS
         }
         val slot = when (item) {
@@ -107,27 +111,27 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
         return super.interact(player, hand)
     }
 
-    override fun toTag(tag: CompoundTag?): CompoundTag {
-        val inv = ListTag()
+    override fun writeNbt(tag: NbtCompound?): NbtCompound {
+        val inv = NbtList()
         (0 until inventory.size).forEach { slot ->
             val stack = inventory[slot]
-            val data = stack.toTag(CompoundTag())
+            val data = stack.writeNbt(NbtCompound())
             data.putInt("Slot", slot)
             inv.add(data)
         }
         tag?.put("Inventory", inv)
         if (ownerUuid != null)
             tag?.putString("OwnerUuid", ownerUuid)
-        return super.toTag(tag)
+        return super.writeNbt(tag)
     }
 
-    override fun fromTag(tag: CompoundTag?) {
-        val inv = tag?.get("Inventory") as ListTag?
-        inv?.forEach { data ->
-            data as CompoundTag
-            inventory[data.getInt("Slot")] = ItemStack.fromTag(data)
+    override fun readNbt(tag: NbtCompound?) {
+        val inv = tag?.get("Inventory") as NbtList
+        inv.forEach { data ->
+            data as NbtCompound
+            inventory[data.getInt("Slot")] = ItemStack.fromNbt(data)
         }
-        ownerUuid = tag?.getString("OwnerUuid")
-        super.fromTag(tag)
+        ownerUuid = tag.getString("OwnerUuid")
+        super.readNbt(tag)
     }
 }

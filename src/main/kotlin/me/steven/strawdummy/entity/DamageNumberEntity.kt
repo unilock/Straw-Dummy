@@ -1,10 +1,11 @@
 package me.steven.strawdummy.entity
 
+import me.steven.strawdummy.mixin.AccessorEntity
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.Packet
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket
 import net.minecraft.world.World
@@ -19,11 +20,7 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
             this.dataTracker.set(DAMAGE_AMOUNT, value)
         }
 
-    override fun writeCustomDataToTag(tag: CompoundTag?) {
-    }
-
-    override fun readCustomDataFromTag(tag: CompoundTag?) {
-    }
+    val eId: Int get() = (this as AccessorEntity).entityId
 
     override fun createSpawnPacket(): Packet<*> = EntitySpawnS2CPacket(this)
 
@@ -34,7 +31,7 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
     override fun tick() {
         ticks++
         if (ticks > 100) {
-            remove()
+            remove(RemovalReason.DISCARDED)
             return
         }
         super.tick()
@@ -48,6 +45,12 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
         val age = ticks / 2000f
         this.setVelocity(vec3d2.x + (0.01 - age), vec3d2.y - 0.03, vec3d2.z + (0.01 - age))
         updatePosition(d, e, f)
+    }
+
+    override fun readCustomDataFromNbt(nbt: NbtCompound?) {
+    }
+
+    override fun writeCustomDataToNbt(nbt: NbtCompound?) {
     }
 
     companion object {
