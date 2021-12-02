@@ -1,6 +1,5 @@
 package me.steven.strawdummy.entity
 
-import me.steven.strawdummy.mixin.AccessorEntity
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.data.DataTracker
@@ -20,8 +19,6 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
             this.dataTracker.set(DAMAGE_AMOUNT, value)
         }
 
-    val eId: Int get() = (this as AccessorEntity).entityId
-
     override fun createSpawnPacket(): Packet<*> = EntitySpawnS2CPacket(this)
 
     override fun initDataTracker() {
@@ -30,7 +27,7 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
 
     override fun tick() {
         ticks++
-        if (ticks > 100) {
+        if (ticks >= 50) {
             remove(RemovalReason.DISCARDED)
             return
         }

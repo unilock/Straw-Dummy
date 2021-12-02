@@ -38,8 +38,7 @@ object StrawDummyClient : ClientModInitializer {
             e.updateTrackedPosition(x, y, z)
             e.pitch = (pitch * 360f)  / 256.0f
             e.yaw = (yaw * 360f) / 256.0f
-            e.setEntityId(id)
-            ctx.taskQueue.execute { (ctx.player.world as ClientWorld).addEntity(id, e) }
+            ctx.taskQueue.execute { (ctx.player.world as ClientWorld).addEntity(-1, e) }
         }
     }
 }

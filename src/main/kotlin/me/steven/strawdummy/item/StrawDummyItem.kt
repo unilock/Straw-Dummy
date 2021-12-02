@@ -37,7 +37,7 @@ class StrawDummyItem(settings: Settings) : Item(settings) {
             else -> context.blockPos.offset(context.side).down()
         }
         val entity = StrawDummy.DUMMY_ENTITY_TYPE.create(world, null, null, context.player, pos, SpawnReason.MOB_SUMMONED, true, false)
-        if (world.getBlockCollisions(entity, Box(pos.up()).stretch(0.0, 1.0, 0.0)).anyMatch { !it.isEmpty }) {
+        if (world.getBlockCollisions(entity, Box(pos.up()).stretch(0.0, 1.0, 0.0)).any { !it.isEmpty }) {
             player?.sendMessage(TranslatableText("item.strawdummy.strawdummy.too_tight").formatted(Formatting.RED, Formatting.BOLD), true)
             return ActionResult.PASS
         }

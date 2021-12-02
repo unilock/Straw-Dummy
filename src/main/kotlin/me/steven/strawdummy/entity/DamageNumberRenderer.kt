@@ -1,6 +1,7 @@
 package me.steven.strawdummy.entity
 
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.Frustum
 import net.minecraft.client.render.VertexConsumerProvider
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.EntityRenderer
@@ -20,7 +21,7 @@ class DamageNumberRenderer(context: EntityRendererFactory.Context) : EntityRende
         matrices?.multiply(this.dispatcher.rotation)
         val age = entity.ticks / 1000f
         matrices?.scale(-0.05f + age, -0.05f + age, 0.05f - age)
-        if (0.05f - age <= 0) entity.remove(Entity.RemovalReason.DISCARDED)
+        //if (0.05f - age <= 0) entity.remove(Entity.RemovalReason.DISCARDED)
         val textRenderer = MinecraftClient.getInstance().textRenderer
         val text = LiteralText(DamageNumberEntity.FORMAT.format(entity.damage))
         val h = -textRenderer.getWidth(text) / 2f

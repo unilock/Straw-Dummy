@@ -2,7 +2,6 @@ package me.steven.strawdummy.entity
 
 import io.netty.buffer.Unpooled
 import me.steven.strawdummy.StrawDummy
-import me.steven.strawdummy.mixin.AccessorEntity
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
@@ -25,8 +24,6 @@ import net.minecraft.world.TeleportTarget
 import net.minecraft.world.World
 
 class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : LivingEntity(type, world) {
-
-    val eId: Int get() = (this as AccessorEntity).entityId
 
     private var inventory = DefaultedList.ofSize(6, ItemStack.EMPTY)
     var ownerUuid: String? = null
@@ -58,6 +55,9 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     override fun takeKnockback(strength: Double, x: Double, z: Double) {
     }
 
+    override fun heal(amount: Float) {
+    }
+
     override fun setHealth(health: Float) {
         val damage = getHealth() - health
         if (damage > 0 && !world.isClient && !isDead) {
@@ -66,8 +66,8 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
             entity.setPos(this.x + side.offsetX, this.y + 2, this.z + side.offsetZ)
             entity.damage = damage
             val buf = PacketByteBuf(Unpooled.buffer())
-            buf.writeInt(entity.eId)
-            buf.writeUuid(entity.uuid)
+            buf.writeInt(entity.id)
+            buf.writeUuid(MathHelper.randomUuid(world.random))
             buf.writeDouble(entity.x)
             buf.writeDouble(entity.y)
             buf.writeDouble(entity.z)

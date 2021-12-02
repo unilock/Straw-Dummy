@@ -34,7 +34,7 @@ class StrawDummyEntityRenderer(ctx: EntityRendererFactory.Context, model: Player
     override fun renderLabelIfPresent(entity: StrawDummyEntity?, text: Text?, matrices: MatrixStack?, vertexConsumers: VertexConsumerProvider?, light: Int) {}
 
     override fun getTexture(entity: StrawDummyEntity): Identifier {
-        return TEXTURE_IDENTIFIERS[entity.eId % 9]
+        return TEXTURE_IDENTIFIERS[entity.id % 9]
     }
 
     companion object {
