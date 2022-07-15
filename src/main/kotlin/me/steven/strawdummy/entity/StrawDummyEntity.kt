@@ -2,7 +2,7 @@ package me.steven.strawdummy.entity
 
 import io.netty.buffer.Unpooled
 import me.steven.strawdummy.StrawDummy
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.nbt.NbtList
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Arm
@@ -75,7 +76,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
             buf.writeByte(MathHelper.floor(yaw * 256.0f / 360.0f))
             buf.writeFloat(entity.damage)
             world.players.forEach {
-                ServerSidePacketRegistry.INSTANCE.sendToPlayer(it, StrawDummy.DAMAGE_NUMBER_PACKET, buf)
+                ServerPlayNetworking.send(it as ServerPlayerEntity, StrawDummy.DAMAGE_NUMBER_PACKET, buf)
             }
         }
     }

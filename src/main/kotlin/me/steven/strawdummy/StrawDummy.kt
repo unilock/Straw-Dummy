@@ -6,9 +6,9 @@ import me.steven.strawdummy.entity.DamageNumberEntity
 import me.steven.strawdummy.entity.StrawDummyEntity
 import me.steven.strawdummy.item.StrawDummyItem
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.LivingEntity
@@ -40,7 +40,7 @@ object StrawDummy : ModInitializer {
     fun sendConfigPacket(playerEntity: ServerPlayerEntity) {
         val buf = PacketByteBuf(Unpooled.buffer())
         buf.writeInt(CONFIG.dummyLimitPerUser)
-        ServerSidePacketRegistry.INSTANCE.sendToPlayer(playerEntity, CONFIG_SYNC_PACKET, buf)
+        ServerPlayNetworking.send(playerEntity, CONFIG_SYNC_PACKET, buf)
     }
 
     val CONFIG_SYNC_PACKET = identifier("config_sync")

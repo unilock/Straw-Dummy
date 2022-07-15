@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.EntityRenderer
 import net.minecraft.client.render.entity.EntityRendererFactory
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.Entity
-import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 class DamageNumberRenderer(context: EntityRendererFactory.Context) : EntityRenderer<DamageNumberEntity>(context) {
@@ -23,7 +23,7 @@ class DamageNumberRenderer(context: EntityRendererFactory.Context) : EntityRende
         matrices?.scale(-0.05f + age, -0.05f + age, 0.05f - age)
         //if (0.05f - age <= 0) entity.remove(Entity.RemovalReason.DISCARDED)
         val textRenderer = MinecraftClient.getInstance().textRenderer
-        val text = LiteralText(DamageNumberEntity.FORMAT.format(entity.damage))
+        val text = Text.literal(DamageNumberEntity.FORMAT.format(entity.damage))
         val h = -textRenderer.getWidth(text) / 2f
         textRenderer.draw(matrices, text, h, 0f, (0xeeee2222).toInt())
         matrices?.pop()

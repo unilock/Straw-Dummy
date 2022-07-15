@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.text.Text
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Formatting
 import net.minecraft.util.math.Box
@@ -26,7 +25,7 @@ class StrawDummyItem(settings: Settings) : Item(settings) {
         val dummies = (world as ServerWorld).getEntitiesByType(StrawDummy.DUMMY_ENTITY_TYPE) { (it as StrawDummyEntity).ownerUuid == player?.uuidAsString }.size
         if (StrawDummy.CONFIG.dummyLimitPerUser in 1..dummies) {
             val key = if (StrawDummy.CONFIG.dummyLimitPerUser == 1) "item.strawdummy.strawdummy.tooltip1" else "item.strawdummy.strawdummy.tooltip2"
-            player?.sendMessage(TranslatableText(key, StrawDummy.CONFIG.dummyLimitPerUser).formatted(Formatting.RED, Formatting.BOLD), true)
+            player?.sendMessage(Text.translatable(key, StrawDummy.CONFIG.dummyLimitPerUser).formatted(Formatting.RED, Formatting.BOLD), true)
             return ActionResult.PASS
         }
         val stack = context.stack
@@ -38,7 +37,7 @@ class StrawDummyItem(settings: Settings) : Item(settings) {
         }
         val entity = StrawDummy.DUMMY_ENTITY_TYPE.create(world, null, null, context.player, pos, SpawnReason.MOB_SUMMONED, true, false)
         if (world.getBlockCollisions(entity, Box(pos.up()).stretch(0.0, 1.0, 0.0)).any { !it.isEmpty }) {
-            player?.sendMessage(TranslatableText("item.strawdummy.strawdummy.too_tight").formatted(Formatting.RED, Formatting.BOLD), true)
+            player?.sendMessage(Text.translatable("item.strawdummy.strawdummy.too_tight").formatted(Formatting.RED, Formatting.BOLD), true)
             return ActionResult.PASS
         }
         entity?.lookAt(EntityAnchorArgumentType.EntityAnchor.FEET, context.player?.pos)
@@ -55,7 +54,7 @@ class StrawDummyItem(settings: Settings) : Item(settings) {
     ) {
         if (StrawDummy.CONFIG.dummyLimitPerUser > 0) {
             val key = if (StrawDummy.CONFIG.dummyLimitPerUser == 1) "item.strawdummy.strawdummy.tooltip1" else "item.strawdummy.strawdummy.tooltip2"
-            tooltip?.add(TranslatableText(key, StrawDummy.CONFIG.dummyLimitPerUser).formatted(Formatting.BLUE, Formatting.ITALIC))
+            tooltip?.add(Text.translatable(key, StrawDummy.CONFIG.dummyLimitPerUser).formatted(Formatting.BLUE, Formatting.ITALIC))
         }
     }
 }
