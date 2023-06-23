@@ -82,7 +82,7 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     }
 
     override fun applyDamage(source: DamageSource?, amount: Float) {
-        if (source == DamageSource.OUT_OF_WORLD || source == DamageSource.IN_WALL) super.setHealth(0f)
+        if (source == damageSources.outOfWorld() || source == damageSources.inWall()) super.setHealth(0f)
         super.applyDamage(source, amount)
     }
 

@@ -5,7 +5,8 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.nbt.NbtCompound
-import net.minecraft.network.Packet
+import net.minecraft.network.listener.ClientPlayPacketListener
+import net.minecraft.network.packet.Packet
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket
 import net.minecraft.world.World
 import java.text.DecimalFormat
@@ -19,7 +20,7 @@ class DamageNumberEntity(type: EntityType<DamageNumberEntity>, world: World) : E
             this.dataTracker.set(DAMAGE_AMOUNT, value)
         }
 
-    override fun createSpawnPacket(): Packet<*> = EntitySpawnS2CPacket(this)
+    override fun createSpawnPacket(): Packet<ClientPlayPacketListener> = EntitySpawnS2CPacket(this)
 
     override fun initDataTracker() {
         this.dataTracker.startTracking(DAMAGE_AMOUNT, 0f)

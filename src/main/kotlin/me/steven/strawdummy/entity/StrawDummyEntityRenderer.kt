@@ -20,7 +20,8 @@ class StrawDummyEntityRenderer(ctx: EntityRendererFactory.Context, model: Player
             ArmorFeatureRenderer(
                 this,
                 BipedEntityModel(ctx.getPart(EntityModelLayers.PLAYER_INNER_ARMOR)),
-                BipedEntityModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR))
+                BipedEntityModel(ctx.getPart(EntityModelLayers.PLAYER_OUTER_ARMOR)),
+                ctx.modelManager
             )
         )
         addFeature(HeldItemFeatureRenderer(this, ctx.heldItemRenderer))
