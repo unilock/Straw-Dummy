@@ -2,9 +2,7 @@
   "required": true,
   "package": "me.steven.strawdummy.mixin",
   "compatibilityLevel": "JAVA_16",
-  "mixins": [
-    "MixinPlayerManager"
-  ],
+  "mixins": [],
   "injectors": {
     "defaultRequire": 1
   }

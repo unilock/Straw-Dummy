@@ -9,6 +9,7 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents.ModifyEntries
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
@@ -45,6 +46,11 @@ object StrawDummy : ModInitializer {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE)
             .register(ModifyEntries { content ->
                 content.add(DUMMY_ITEM)
+            })
+
+        ServerPlayConnectionEvents.JOIN
+            .register(ServerPlayConnectionEvents.Join { handler, _, _ ->
+                sendConfigPacket(handler.player)
             })
     }
 
