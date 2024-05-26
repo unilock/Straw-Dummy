@@ -21,6 +21,7 @@ object StrawDummyClient : ClientModInitializer {
             ctx
         ) }
         ClientPlayNetworking.registerGlobalReceiver(StrawDummy.CONFIG_SYNC_PACKET) { client, handler, buf, responseSender ->
+            StrawDummy.CONFIG.dummyDamagesEquipment = buf.readBoolean()
             StrawDummy.CONFIG.dummyLimitPerUser = buf.readInt()
         }
         ClientPlayNetworking.registerGlobalReceiver(StrawDummy.DAMAGE_NUMBER_PACKET) { client, handler, buf, responseSender ->

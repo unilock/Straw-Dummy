@@ -36,6 +36,7 @@ object StrawDummy : ModInitializer {
             configFile.writeText(gson.toJson(CONFIG))
         } else {
             val config = gson.fromJson(configFile.readLines().joinToString(""), Config::class.java)
+            CONFIG.dummyDamagesEquipment = config.dummyDamagesEquipment
             CONFIG.dummyLimitPerUser = config.dummyLimitPerUser
         }
         Registry.register(Registries.ENTITY_TYPE, identifier("strawdummy"), DUMMY_ENTITY_TYPE)
@@ -56,6 +57,7 @@ object StrawDummy : ModInitializer {
 
     fun sendConfigPacket(playerEntity: ServerPlayerEntity) {
         val buf = PacketByteBuf(Unpooled.buffer())
+        buf.writeBoolean(CONFIG.dummyDamagesEquipment)
         buf.writeInt(CONFIG.dummyLimitPerUser)
         ServerPlayNetworking.send(playerEntity, CONFIG_SYNC_PACKET, buf)
     }

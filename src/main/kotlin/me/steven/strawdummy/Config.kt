@@ -6,5 +6,6 @@ import org.apache.commons.io.FileUtils
 import java.io.File
 
 class Config {
+    var dummyDamagesEquipment = false
     var dummyLimitPerUser = -1
 }
