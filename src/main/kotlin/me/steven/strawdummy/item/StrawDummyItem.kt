@@ -1,6 +1,5 @@
 package me.steven.strawdummy.item
 
-import me.steven.strawdummy.Config
 import me.steven.strawdummy.StrawDummy
 import me.steven.strawdummy.entity.StrawDummyEntity
 import net.minecraft.client.item.TooltipContext

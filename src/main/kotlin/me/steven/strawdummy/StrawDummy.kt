@@ -6,7 +6,6 @@ import me.steven.strawdummy.entity.DamageNumberEntity
 import me.steven.strawdummy.entity.StrawDummyEntity
 import me.steven.strawdummy.item.StrawDummyItem
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents.ModifyEntries
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
@@ -14,7 +13,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricEntityTypeBuilder
 import net.fabricmc.loader.api.FabricLoader
-import net.minecraft.block.Blocks
 import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.SpawnGroup
