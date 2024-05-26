@@ -127,12 +127,14 @@ class StrawDummyEntity(type: EntityType<StrawDummyEntity>, world: World) : Livin
     }
 
     override fun readNbt(tag: NbtCompound?) {
-        val inv = tag?.get("Inventory") as NbtList
-        inv.forEach { data ->
-            data as NbtCompound
-            inventory[data.getInt("Slot")] = ItemStack.fromNbt(data)
+        if (tag?.contains("Inventory", 9) == true) {
+            val inv = tag.get("Inventory") as NbtList
+            inv.forEach { data ->
+                data as NbtCompound
+                inventory[data.getInt("Slot")] = ItemStack.fromNbt(data)
+            }
+            ownerUuid = tag.getString("OwnerUuid")
         }
-        ownerUuid = tag.getString("OwnerUuid")
         super.readNbt(tag)
     }
 }
